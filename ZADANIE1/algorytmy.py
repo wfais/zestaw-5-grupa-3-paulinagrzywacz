@@ -53,31 +53,94 @@ def shell_sort(array: MonitorowanaTablica):
 
 
 def merge_sort(array: MonitorowanaTablica, left=None, right=None):
-# twoj kod
-    pass
+    if left is None:
+        left = 0
+    if right is None:
+        right = len(array) - 1
+
+    if left < right:
+        middle = (left + right) // 2
+        merge_sort(array, left, middle)
+        merge_sort(array, middle + 1, right)
+        merge(array, left, middle, right)
 
 
 def merge(array: MonitorowanaTablica, left, middle, right):
-    """Merges two sorted subarrays."""
-    # twoj kod, moze sie przydac
-    pass
+    left_part = [array[i] for i in range(left, middle + 1)]
+    right_part = [array[i] for i in range(middle + 1, right + 1)]
+
+    i = j = 0
+    k = left
+
+    while i < len(left_part) and j < len(right_part):
+        if left_part[i] <= right_part[j]:
+            array[k] = left_part[i]
+            i += 1
+        else:
+            array[k] = right_part[j]
+            j += 1
+        k += 1
+
+    while i < len(left_part):
+        array[k] = left_part[i]
+        i += 1
+        k += 1
+
+    while j < len(right_part):
+        array[k] = right_part[j]
+        j += 1
+        k += 1
 
 
 def quick_sort(array: MonitorowanaTablica, left=None, right=None):
     """Performs quick sort on the given array."""
-    # twoj kod
-    pass
+    if left is None:
+        left = 0
+    if right is None:
+        right = len(array) - 1
+
+    if left < right:
+        pi = partition(array, left, right)
+        quick_sort(array, left, pi - 1)
+        quick_sort(array, pi + 1, right)
 
 
 def partition(array: MonitorowanaTablica, left, right):
     """Partitions the array into two parts."""
-    # twoj kod, moze sie przydac
-    pass
+    pivot = array[right]
+    i = left - 1
+
+    for j in range(left, right):
+        if array[j] <= pivot:
+            i += 1
+            array[i], array[j] = array[j], array[i]
+
+    array[i + 1], array[right] = array[right], array[i + 1]
+    return i + 1
 
 
 def tim_sort(array: MonitorowanaTablica):
-# twoj kod
-    pass
+
+    MIN_RUN = 32
+
+    n = len(array)
+
+    for start in range(0, n, MIN_RUN):
+        end = min(start + MIN_RUN - 1, n - 1)
+        insertion_sort(array, start, end)
+
+    size = MIN_RUN
+    while size < n:
+        for left in range(0, n, 2 * size):
+            mid = min(left + size - 1, n - 1)
+            right = min(left + 2 * size - 1, n - 1)
+
+            if mid < right:
+                merge(array, left, mid, right)
+
+        size *= 2
+
+    return array
 
 
 
@@ -85,7 +148,7 @@ algorytmy = [
     (insertion_sort, "Insertion Sort"),
     (bubble_sort, "Bubble Sort"),
     (shell_sort, "Shell Sort"),
-    # (merge_sort, "Merge Sort"),
-    # (quick_sort, "Quick Sort"),
-    # (tim_sort, "Tim Sort"),
+    (merge_sort, "Merge Sort"),
+    (quick_sort, "Quick Sort"),
+    (tim_sort, "Tim Sort"),
 ]
