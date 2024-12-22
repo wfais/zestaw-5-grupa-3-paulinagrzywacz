@@ -3,9 +3,12 @@ from itertools import product
 
 
 def maximize_expression(K, M, lists):
-    # twoj kod tutaj
-    pass 
-
+    wynik = 0
+    for lista in product(*lists):
+        liczba = sum(x**2 for x in lista) % M
+        wynik = max(wynik, liczba)
+        
+    return wynik 
 
 
 if __name__ == "__main__":
